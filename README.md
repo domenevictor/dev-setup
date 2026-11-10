@@ -123,7 +123,6 @@ The status bar marks windows running an agent: `●` working, `!` waiting for yo
 | `,lg` | lazygit |
 | `,ac` `,as` `,ab` | Claude Code: toggle, send selection, add file |
 | `,aa` `,ad` | accept / reject Claude's proposed diff |
-| `Esc Esc` (in the Claude pane) | switch it to normal mode so `,` keys work there; `i` or entering it again goes back to typing |
 | `jk` | leave insert mode |
 
 Completion: `C-n`/`C-p` move, `C-y` accepts, `C-e` closes.

@@ -32,14 +32,9 @@ local function tree_window()
   return (box and vim.api.nvim_win_is_valid(box)) and box or nil
 end
 
-local function in_tree()
-  local ft = vim.bo.filetype
-  return ft == "snacks_layout_box" or ft:match("^snacks_picker") ~= nil
-end
-
 local function keep_tree_left(wincmd)
   return function()
-    if in_tree() then
+    if vim.bo.filetype:match("^snacks_") then
       return -- cursor is in the tree itself; nothing sensible to move
     end
     local box = tree_window()
