@@ -1,0 +1,49 @@
+#!/bin/sh
+# Run `codex review` on the newest GPT Sol model at high reasoning effort.
+#   codex-review --base main                 changes on this branch vs main
+#   codex-review --uncommitted               staged, unstaged and untracked
+#   codex-review --commit <sha>              one commit
+#   codex-review --base main - < notes.md    same, plus instructions from stdin
+# `codex review` refuses instructions together with a target, so with `-` the
+# target is written into the instructions instead.
+# Override with CODEX_REVIEW_MODEL / CODEX_REVIEW_EFFORT.
+set -eu
+
+latest_sol() {
+  # Codex keeps the account's model list in models_cache.json. Pick the highest
+  # gpt-<version>-sol by version number (gpt-6.1-sol > gpt-6-sol > gpt-5.6-sol).
+  grep -o '"slug": *"gpt-[0-9.]*-sol"' "${CODEX_HOME:-$HOME/.codex}/models_cache.json" 2>/dev/null |
+    sed -E 's/.*"(gpt-([0-9.]+)-sol)"/\2 \1/' | sort -t. -k1,1n -k2,2n | tail -n 1 | cut -d' ' -f2
+}
+
+model="${CODEX_REVIEW_MODEL:-$(latest_sol)}"
+model="${model:-gpt-6.1-sol}" # no cache yet (Codex never run): known-good fallback
+effort="${CODEX_REVIEW_EFFORT:-high}"
+set -- -c "model=\"$model\"" -c "model_reasoning_effort=\"$effort\"" "$@"
+echo "codex-review: $model @ $effort" >&2
+
+case " $* " in *" - "*) ;; *) exec codex review "$@" ;; esac
+
+# Instructions on stdin: turn the target flag into a scope sentence.
+scope="" passthrough=""
+while [ $# -gt 0 ]; do
+  case "$1" in
+    --base) scope="Review the changes on the current branch relative to \`$2\` (\`git diff $2...HEAD\`)."; shift 2 ;;
+    --commit) scope="Review the changes introduced by commit \`$2\` (\`git show $2\`)."; shift 2 ;;
+    --uncommitted) scope="Review the staged, unstaged and untracked changes (\`git status\`, \`git diff HEAD\`)."; shift ;;
+    -) shift ;;
+    *) passthrough="$passthrough$(printf '%s\n' "$1")
+"; shift ;;
+  esac
+done
+[ -n "$scope" ] || { echo "codex-review: '-' needs --base, --commit or --uncommitted" >&2; exit 2; }
+
+# Re-apply the remaining options (the -c pairs and anything else).
+set --
+while IFS= read -r arg; do [ -n "$arg" ] && set -- "$@" "$arg"; done <<EOF
+$passthrough
+EOF
+exec codex review "$@" "$scope
+Only review those changes; read surrounding code as needed for context.
+
+$(cat)"

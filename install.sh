@@ -113,7 +113,7 @@ link_home() {
     case "$(readlink "$link")" in
       "$REPO/home/"*) [ -e "$link" ] || { rm "$link"; echo "  removed stale link ${link/#$HOME/~}"; } ;;
     esac
-  done < <(find "$HOME/.config" "$HOME/.local/bin" -type l 2>/dev/null)
+  done < <(find "$HOME/.config" "$HOME/.local/bin" "$HOME/.claude/skills" -type l 2>/dev/null)
 
   # bash/zsh (used by Claude Code, Codex and scripts) get the same PATH as fish.
   local line='[ -f "$HOME/.config/dev-setup/env.sh" ] && . "$HOME/.config/dev-setup/env.sh"'
@@ -150,6 +150,18 @@ agent_hooks() {
     sed -i.bak '/^notify = \[".*\/\.local\/bin\/tmux-agent-status", "done"\]$/d' "$codex" && rm -f "$codex.bak"
     echo "  removed old notify line from ~/.codex/config.toml"
   fi
+}
+
+# Third-party Claude Code plugins, installed from their marketplaces (not copied
+# into this repo). Skills of our own live in home/.claude/skills.
+agent_plugins() {
+  step "Claude Code plugins"
+  command -v claude >/dev/null 2>&1 || { warn "claude not installed; skipping plugins"; return 0; }
+  # pstack: Lauren Tan's (poteto) skill stack, Claude Code port.
+  claude plugin marketplace list 2>/dev/null | grep -q pstack-claude ||
+    claude plugin marketplace add michael-denyer/pstack-claude
+  claude plugin marketplace update pstack-claude
+  claude plugin install pstack@pstack-claude || warn "pstack install failed"
 }
 
 # --------------------------------------------------------------- runtimes ---
@@ -205,6 +217,7 @@ install_brew
 [ "$DESKTOP" = 1 ] && install_desktop
 link_home
 agent_hooks
+agent_plugins
 [ "$RUNTIMES" = 1 ] && install_runtimes
 install_tmux_plugins
 install_nvim_plugins
