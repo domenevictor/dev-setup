@@ -60,6 +60,23 @@ abbr -a t tmux new -A -s main
 abbr -a cc claude
 abbr -a cx codex
 
+# Codex normally runs its hooks in a shared background server that doesn't know
+# which tmux pane you're in, so the status bar markers end up on the wrong pane.
+# Inside tmux, run interactive Codex standalone (--no-daemon) so they work.
+function codex --wraps codex --description "codex; standalone inside tmux"
+    if not set -q TMUX
+        command codex $argv
+    else if test (count $argv) -eq 0; or string match -q -- '-*' $argv[1]
+        command codex --no-daemon $argv
+    else if contains -- $argv[1] resume fork agents
+        command codex $argv[1] --no-daemon $argv[2..]
+    else if contains -- $argv[1] exec e review login logout mcp plugin app-server remote-control app completion update doctor sandbox debug apply a queue archive delete unarchive migrate-rollouts migrate-nfs-db cloud exec-server features help
+        command codex $argv
+    else
+        command codex --no-daemon $argv # a prompt: codex "fix the tests"
+    end
+end
+
 if type -q eza
     alias ls "eza --group-directories-first"
     alias ll "eza -la --git --group-directories-first"
