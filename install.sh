@@ -20,6 +20,10 @@ for arg in "$@"; do
   esac
 done
 
+# Tools installed during this run (mise runtimes such as node/npm, which Mason
+# needs for several language servers) must be visible to later steps.
+export PATH="$HOME/.local/share/mise/shims:$HOME/.local/bin:$PATH"
+
 step() { printf '\n\033[1;32m==>\033[0m \033[1m%s\033[0m\n' "$*"; }
 warn() { printf '\033[1;33mwarning:\033[0m %s\n' "$*" >&2; }
 
