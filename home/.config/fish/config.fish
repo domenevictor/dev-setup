@@ -57,6 +57,17 @@ abbr -a gl git pull
 abbr -a glo git log --oneline --graph -20
 abbr -a lg lazygit
 abbr -a t tmux new -A -s main
+
+# Plain `tmux` reattaches to the "main" session instead of creating a new
+# numbered one every time (which tmux-resurrect then keeps bringing back).
+# Any arguments go to tmux unchanged, e.g. `tmux new -s work`.
+function tmux --wraps tmux --description "tmux; no args = attach or create 'main'"
+    if test (count $argv) -eq 0
+        command tmux new-session -A -s main
+    else
+        command tmux $argv
+    end
+end
 abbr -a cc claude
 abbr -a cx codex
 
