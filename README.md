@@ -91,7 +91,7 @@ Material Dark).
 | `prefix H/J/K/L` | resize |
 | `prefix C-l` | clear screen |
 | `prefix w` | all sessions and windows, with agent state |
-| `prefix ,` / `prefix T` / `prefix $` | name the window / pane / session |
+| `prefix ,` / `prefix T` / `prefix $` | name the window / pane / session (unless you name the window, it shows the active pane's name) |
 | `prefix C-s` / `C-r` | save / restore sessions (also automatic every 10 min) |
 | `prefix r` | reload config |
 
