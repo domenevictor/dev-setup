@@ -20,7 +20,7 @@ end, { desc = "Strip trailing whitespace" })
 -- Splits: same letters as tmux (prefix | and -, prefix z). C-h/j/k/l move.
 map("n", "<leader>|", "<cmd>vsplit<cr>", { desc = "Split right" })
 map("n", "<leader>-", "<cmd>split<cr>", { desc = "Split below" })
-map("n", "<leader>x", "<cmd>close<cr>", { desc = "Close split" })
+map("n", "<leader>x", "<cmd>quit<cr>", { desc = "Close split (quits nvim if it's the last)" })
 map("n", "<leader>o", "<cmd>only<cr>", { desc = "Close other splits" })
 map("n", "<leader>z", function() Snacks.zen.zoom() end, { desc = "Zoom split (toggle)" })
 -- Moving splits around would also move the file tree (,e) out of its place on
@@ -32,9 +32,14 @@ local function tree_window()
   return (box and vim.api.nvim_win_is_valid(box)) and box or nil
 end
 
+local function in_tree()
+  local ft = vim.bo.filetype
+  return ft == "snacks_layout_box" or ft:match("^snacks_picker") ~= nil
+end
+
 local function keep_tree_left(wincmd)
   return function()
-    if vim.bo.filetype:match("^snacks_") then
+    if in_tree() then
       return -- cursor is in the tree itself; nothing sensible to move
     end
     local box = tree_window()

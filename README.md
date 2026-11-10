@@ -107,7 +107,7 @@ The status bar marks windows running an agent: `●` working, `!` waiting for yo
 | `,\|` / `,-` | split right / below (same keys as tmux) |
 | `,H` `,J` `,K` `,L` | move this split to the far left / bottom / top / right (the file tree stays on the left) |
 | `,z` | zoom this split (toggle) |
-| `,x` / `,o` | close this split / close all others |
+| `,x` / `,o` | close this split / close all others (closing the last one quits, tree and all) |
 | `,=` / `,r` | equalize sizes / rotate splits |
 | `,e` | file tree on the left (also opens for `nvim .`) |
 | `-` | this folder as an editable buffer (rename/move/delete by editing text) |
@@ -123,6 +123,7 @@ The status bar marks windows running an agent: `●` working, `!` waiting for yo
 | `,lg` | lazygit |
 | `,ac` `,as` `,ab` | Claude Code: toggle, send selection, add file |
 | `,aa` `,ad` | accept / reject Claude's proposed diff |
+| `Esc Esc` (in the Claude pane) | switch it to normal mode so `,` keys work there; `i` or entering it again goes back to typing |
 | `jk` | leave insert mode |
 
 Completion: `C-n`/`C-p` move, `C-y` accepts, `C-e` closes.

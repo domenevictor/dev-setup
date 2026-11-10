@@ -47,6 +47,38 @@ au("BufReadPost", {
 
 au("VimResized", { command = "tabdo wincmd =" })
 
+-- When the last real window closes and only the file tree (,e) is left,
+-- quit Neovim, so one :q (or ,x) is enough.
+local function is_tree_win(win)
+  local ft = vim.bo[vim.api.nvim_win_get_buf(win)].filetype
+  return ft == "snacks_layout_box" or ft:match("^snacks_picker") ~= nil
+end
+au("WinClosed", {
+  callback = function(ev)
+    local closed = tonumber(ev.match)
+    if not closed or not vim.api.nvim_win_is_valid(closed) then
+      return
+    end
+    if vim.api.nvim_win_get_config(closed).relative ~= "" or is_tree_win(closed) then
+      return -- a float or the tree itself closed
+    end
+    vim.schedule(function()
+      local tree_only = false
+      for _, win in ipairs(vim.api.nvim_list_wins()) do
+        if vim.api.nvim_win_get_config(win).relative == "" then
+          if not is_tree_win(win) then
+            return -- a real window is still open (any tab)
+          end
+          tree_only = true
+        end
+      end
+      if tree_only then
+        vim.cmd("confirm qall") -- asks about unsaved changes instead of failing
+      end
+    end)
+  end,
+})
+
 vim.api.nvim_create_user_command("FormatToggle", function(args)
   local scope = args.bang and vim.b or vim.g
   scope.disable_autoformat = not scope.disable_autoformat
