@@ -24,33 +24,33 @@ map("n", "<leader>x", "<cmd>close<cr>", { desc = "Close split" })
 map("n", "<leader>o", "<cmd>only<cr>", { desc = "Close other splits" })
 map("n", "<leader>z", function() Snacks.zen.zoom() end, { desc = "Zoom split (toggle)" })
 -- Moving splits around would also move the file tree (,e) out of its place on
--- the left. So: close the tree, rearrange, reopen it, and return to the split.
+-- the left. So after each move, slide the tree's window back to the far left
+-- (full height, same width) and share the rest of the space evenly.
+local function tree_window()
+  local tree = Snacks.picker.get({ source = "explorer" })[1]
+  local box = tree and tree.layout and tree.layout.root and tree.layout.root.win
+  return (box and vim.api.nvim_win_is_valid(box)) and box or nil
+end
+
 local function keep_tree_left(wincmd)
   return function()
     if vim.bo.filetype:match("^snacks_") then
       return -- cursor is in the tree itself; nothing sensible to move
     end
-    local tree = Snacks.picker.get({ source = "explorer" })[1]
-    if not tree then
-      return vim.cmd.wincmd(wincmd)
+    local box = tree_window()
+    local width = box and vim.api.nvim_win_get_width(box)
+    local ok = pcall(vim.cmd.wincmd, wincmd)
+    if not ok then
+      -- Vim can only rotate a row/column whose splits aren't split again.
+      return vim.notify("Can't rotate this layout (it mixes side-by-side and stacked splits)", vim.log.levels.WARN)
     end
-    local win = vim.api.nvim_get_current_win()
-    tree:close()
-    vim.api.nvim_set_current_win(win)
-    vim.cmd.wincmd(wincmd)
-    Snacks.explorer({
-      on_show = function()
-        vim.schedule(function()
-          if vim.api.nvim_win_is_valid(win) then
-            vim.api.nvim_set_current_win(win)
-            vim.cmd("stopinsert")
-          end
-          -- The tree takes its width back from the split next to it; share
-          -- the rest evenly again (the tree keeps its own fixed width).
-          vim.cmd("wincmd =")
-        end)
-      end,
-    })
+    if box and vim.api.nvim_win_is_valid(box) then
+      local win = vim.api.nvim_get_current_win()
+      vim.api.nvim_win_call(box, function() vim.cmd.wincmd("H") end)
+      vim.api.nvim_win_set_width(box, width)
+      vim.api.nvim_set_current_win(win)
+      vim.cmd.wincmd("=") -- the tree keeps its width; the rest is shared
+    end
   end
 end
 
