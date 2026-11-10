@@ -1,18 +1,26 @@
 return {
-  -- Themes. Default: gruvbox-material. Switch any time with ,fc (live preview).
-  -- Each has a matching Ghostty theme; see ~/.config/ghostty/config.
+  -- Themes. Default: tokyonight-night. Also: tokyonight-moon, gruvbox-material,
+  -- rose-pine-moon. Switch any time with ,fc (live preview). Each has a matching
+  -- Ghostty theme; see ~/.config/ghostty/config.
+  {
+    "folke/tokyonight.nvim",
+    lazy = false,
+    priority = 1000,
+    config = function()
+      require("tokyonight").setup({ style = "night" })
+      vim.cmd.colorscheme("tokyonight-night")
+    end,
+  },
   {
     "sainnhe/gruvbox-material",
     lazy = false,
     priority = 1000,
-    config = function()
+    init = function()
       vim.g.gruvbox_material_background = "medium"
       vim.g.gruvbox_material_better_performance = 1
       vim.g.gruvbox_material_enable_italic = 1
-      vim.cmd.colorscheme("gruvbox-material")
     end,
   },
-  { "folke/tokyonight.nvim", lazy = false, priority = 1000, opts = { style = "moon" } }, -- tokyonight-moon
   { "rose-pine/neovim", name = "rose-pine", lazy = false, priority = 1000, opts = { variant = "moon" } }, -- rose-pine-moon
 
   { -- Shows available keys after you press , (or g, z, ], ...) and wait
