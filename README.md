@@ -91,10 +91,14 @@ Material Dark).
 | `prefix H/J/K/L` | resize |
 | `prefix C-l` | clear screen |
 | `prefix w` | all sessions and windows, with agent state |
+| `prefix ,` / `prefix T` / `prefix $` | name the window / pane / session |
 | `prefix C-s` / `C-r` | save / restore sessions (also automatic every 10 min) |
 | `prefix r` | reload config |
 
-The status bar marks windows running an agent: `●` working, `!` waiting for you, `✓` done.
+Agent state is tracked per pane: `●` working, `!` waiting for you, `✓` done.
+Each window in the status bar shows one marker per agent pane (`1:fish ●!✓`),
+and in windows with several panes each pane's border shows its name (or
+program) and marker.
 
 **Neovim** (leader `,`; press it and wait to see everything)
 

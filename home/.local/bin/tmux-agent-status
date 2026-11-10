@@ -1,11 +1,12 @@
 #!/bin/sh
-# Mark the tmux window an agent runs in, shown in the status bar:
+# Mark the tmux pane an agent runs in, shown in the status bar (one marker per
+# agent pane) and on the pane's border when a window has several panes:
 #   working -> ●   waiting -> !   done -> ✓   clear -> (nothing)
 # Called by Claude Code hooks and Codex `notify`. Does nothing outside tmux.
 [ -n "$TMUX_PANE" ] || exit 0
 command -v tmux >/dev/null 2>&1 || exit 0
 case "$1" in
-  working | waiting | done) tmux set-option -wq -t "$TMUX_PANE" @agent "$1" ;;
-  clear) tmux set-option -wqu -t "$TMUX_PANE" @agent ;;
+  working | waiting | done) tmux set-option -pq -t "$TMUX_PANE" @agent "$1" ;;
+  clear) tmux set-option -pqu -t "$TMUX_PANE" @agent ;;
 esac
 exit 0
