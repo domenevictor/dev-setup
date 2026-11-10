@@ -12,7 +12,8 @@ git clone git@github.com:domenevictor/dev-setup.git ~/code/dev-setup
 ```
 
 Options: `--link-only` (just relink configs), `--no-runtimes` (skip mise),
-`--no-chsh` (keep the current login shell), `--no-desktop` (skip desktop apps).
+`--no-chsh` (keep the current login shell), `--no-desktop` (skip desktop apps),
+`--no-agents` (leave Claude Code and Codex untouched, e.g. on a work machine).
 Re-running is safe.
 
 Desktop apps (`Brewfile.desktop`: Ghostty) are installed only on a physical

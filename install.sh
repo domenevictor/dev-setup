@@ -6,18 +6,21 @@
 #   ./install.sh --no-runtimes skip mise runtimes (node, python, rust, ...)
 #   ./install.sh --no-chsh     don't change the login shell to fish
 #   ./install.sh --no-desktop  skip desktop apps (Ghostty); automatic in VMs/Linux
+#   ./install.sh --no-agents   leave Claude Code / Codex alone: no install, hooks,
+#                              plugins, skills or agent scripts (e.g. a work machine)
 set -euo pipefail
 
 REPO="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 OS="$(uname -s)"
-LINK_ONLY=0 RUNTIMES=1 CHSH=1 DESKTOP=1
+LINK_ONLY=0 RUNTIMES=1 CHSH=1 DESKTOP=1 AGENTS=1
 for arg in "$@"; do
   case "$arg" in
     --link-only) LINK_ONLY=1 ;;
     --no-runtimes) RUNTIMES=0 ;;
     --no-chsh) CHSH=0 ;;
     --no-desktop) DESKTOP=0 ;;
-    -h|--help) sed -n '2,9p' "$0"; exit 0 ;;
+    --no-agents) AGENTS=0 ;;
+    -h|--help) sed -n '2,10p' "$0"; exit 0 ;;
     *) echo "unknown option: $arg" >&2; exit 2 ;;
   esac
 done
@@ -64,7 +67,7 @@ install_brew() {
     NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
     load_brew
   fi
-  brew bundle --file="$REPO/Brewfile"
+  HOMEBREW_DEV_SETUP_NO_AGENTS="$([ "$AGENTS" = 1 ] || echo 1)" brew bundle --file="$REPO/Brewfile"
 }
 
 install_desktop() {
@@ -79,7 +82,12 @@ install_desktop() {
 }
 
 # ------------------------------------------------------------------ links ---
-# Every file under home/ is symlinked to the same path under $HOME.
+# Every file under home/ is symlinked to the same path under $HOME, except the
+# agent files (skills, agent scripts) with --no-agents.
+is_agent_file() {
+  case "$1" in .claude/* | .local/bin/codex-review | .local/bin/tmux-agent-status) return 0 ;; esac
+  return 1
+}
 # Anything already there (that isn't our link) is moved to ~/.dev-setup-backup/.
 BACKUP="$HOME/.dev-setup-backup/$(date +%Y%m%d-%H%M%S)"
 
@@ -99,6 +107,7 @@ link_home() {
 
   local rel src dst
   while IFS= read -r rel; do
+    [ "$AGENTS" = 1 ] || ! is_agent_file "$rel" || continue
     src="$REPO/home/$rel" dst="$HOME/$rel"
     if [ -L "$dst" ] && [ "$(readlink "$dst")" = "$src" ]; then continue; fi
     backup "$rel"
@@ -216,8 +225,7 @@ install_prereqs
 install_brew
 [ "$DESKTOP" = 1 ] && install_desktop
 link_home
-agent_hooks
-agent_plugins
+[ "$AGENTS" = 1 ] && agent_hooks && agent_plugins
 [ "$RUNTIMES" = 1 ] && install_runtimes
 install_tmux_plugins
 install_nvim_plugins

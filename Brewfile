@@ -43,7 +43,7 @@ brew "btop"
 brew "wget"
 
 # Coding agents (macOS casks; on Linux see README)
-if OS.mac?
+if OS.mac? && ENV["HOMEBREW_DEV_SETUP_NO_AGENTS"] != "1"
   cask "claude-code"
   cask "codex"
 end
