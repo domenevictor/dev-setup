@@ -105,7 +105,7 @@ The status bar marks windows running an agent: `●` working, `!` waiting for yo
 | `,fb` `,fr` `,fs` | buffers, recent files, symbols |
 | `,C` / `,fd` | diagnostics in this file / everywhere |
 | `,\|` / `,-` | split right / below (same keys as tmux) |
-| `,H` `,J` `,K` `,L` | move this split to the far left / bottom / top / right |
+| `,H` `,J` `,K` `,L` | move this split to the far left / bottom / top / right (the file tree stays on the left) |
 | `,z` | zoom this split (toggle) |
 | `,x` / `,o` | close this split / close all others |
 | `,=` / `,r` | equalize sizes / rotate splits |
