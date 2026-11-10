@@ -8,7 +8,9 @@ return {
     lazy = false,
     priority = 1000,
     config = function()
-      require("rose-pine").setup({ variant = "main" })
+      -- transparency: use the background tmux gives the pane (Rose Pine base, or
+      -- darker when the pane isn't focused), so nvim panes dim like the others.
+      require("rose-pine").setup({ variant = "main", styles = { transparency = true } })
       vim.cmd.colorscheme("rose-pine-main")
     end,
   },
