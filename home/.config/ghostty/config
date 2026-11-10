@@ -1,8 +1,12 @@
 # Theme: matches the Neovim colorscheme. To switch, uncomment one line and
 # reload the config (Cmd+Shift+,). In nvim, ,fc switches the colorscheme.
-theme = Gruvbox Material Dark     # nvim: gruvbox-material (default)
-# theme = TokyoNight Moon         # nvim: tokyonight-moon
-# theme = Rose Pine Moon          # nvim: rose-pine-moon
+# (Ghostty doesn't allow comments after a value, so they go above.)
+# nvim: gruvbox-material (default)
+theme = Gruvbox Material Dark
+# nvim: tokyonight-moon
+# theme = TokyoNight Moon
+# nvim: rose-pine-moon
+# theme = Rose Pine Moon
 
 font-family = Monaco
 font-size = 10
