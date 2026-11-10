@@ -1,6 +1,6 @@
 ---
 name: codex-review-loop
-description: Get an independent code review from Codex (newest GPT Sol model, high effort) and iterate on it for up to 5 rounds, judging each finding critically instead of accepting it. Use when asked for a Codex review, a second-opinion review, or "review loop", and as the review gate inside the yolo skill.
+description: Use when the user asks for a Codex review, a second opinion, or a review loop on a change, and before calling any change done in yolo.
 ---
 
 # Codex review loop

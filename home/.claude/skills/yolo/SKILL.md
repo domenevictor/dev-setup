@@ -1,6 +1,6 @@
 ---
 name: yolo
-description: Autonomously carry a task to finished, reviewed work without check-ins. In repos that use PRs, splits it into as many stacked draft PRs as needed; in repos that don't, commits locally without pushing. Every unit must pass the repo's validation (tests, lint, typecheck, build, CI steps) and the codex-review-loop. Never merges. Use when the user says "yolo", "just do it", or asks you to roll ahead without asking.
+description: Use when the user says "yolo", "just do it", or wants a task carried through to review-ready without check-ins.
 ---
 
 # yolo
