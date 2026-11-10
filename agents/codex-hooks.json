@@ -1,0 +1,9 @@
+{
+  "hooks": {
+    "UserPromptSubmit": [{ "hooks": [{ "type": "command", "command": "~/.local/bin/tmux-agent-status working" }] }],
+    "PostToolUse": [{ "hooks": [{ "type": "command", "command": "~/.local/bin/tmux-agent-status working" }] }],
+    "PermissionRequest": [{ "hooks": [{ "type": "command", "command": "~/.local/bin/tmux-agent-status waiting" }] }],
+    "Stop": [{ "hooks": [{ "type": "command", "command": "~/.local/bin/tmux-agent-status done" }] }],
+    "SessionEnd": [{ "hooks": [{ "type": "command", "command": "~/.local/bin/tmux-agent-status clear" }] }]
+  }
+}

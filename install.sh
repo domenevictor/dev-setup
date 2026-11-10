@@ -123,27 +123,32 @@ link_home() {
 }
 
 # ------------------------------------------------------------ agent hooks ---
-# tmux shows each window's agent state (● working, ! waiting, ✓ done).
-agent_hooks() {
-  step "Agent status hooks (Claude Code, Codex)"
-  local settings="$HOME/.claude/settings.json" tmp
-  mkdir -p "$HOME/.claude"
-  [ -s "$settings" ] || echo '{}' >"$settings"
+# tmux shows each pane's agent state (• working, ? waiting, ✓ done).
+# Merges our hooks into a JSON hooks file, keeping any hooks already there.
+merge_hooks() { # $1 = our hooks file, $2 = target JSON file
+  local tmp
+  mkdir -p "$(dirname "$2")"
+  [ -s "$2" ] || echo '{}' >"$2"
   tmp="$(mktemp)"
-  jq --slurpfile ours "$REPO/agents/claude-hooks.json" '
+  jq --slurpfile ours "$1" '
     reduce ($ours[0].hooks | to_entries[]) as $e (.;
       .hooks[$e.key] = ((.hooks[$e.key] // []) as $cur
         | if ([$cur[].hooks[]?.command] | index($e.value[0].hooks[0].command)) != null
-          then $cur else $cur + $e.value end))' "$settings" >"$tmp" && mv "$tmp" "$settings"
-  echo "  merged hooks into ~/.claude/settings.json"
+          then $cur else $cur + $e.value end))' "$2" >"$tmp" && mv "$tmp" "$2"
+  echo "  merged hooks into ${2/#$HOME/~}"
+}
 
+agent_hooks() {
+  step "Agent status hooks (Claude Code, Codex)"
+  merge_hooks "$REPO/agents/claude-hooks.json" "$HOME/.claude/settings.json"
+  merge_hooks "$REPO/agents/codex-hooks.json" "$HOME/.codex/hooks.json"
+
+  # Older versions of this script used Codex's `notify` (turn finished only);
+  # hooks.json replaces it, so remove our old line if it's there.
   local codex="$HOME/.codex/config.toml"
-  mkdir -p "$HOME/.codex"; touch "$codex"
-  if ! grep -qE '^\s*notify\s*=' "$codex"; then
-    # Top-level keys must come before any [table], so prepend.
-    tmp="$(mktemp)"
-    { printf 'notify = ["%s/.local/bin/tmux-agent-status", "done"]\n' "$HOME"; cat "$codex"; } >"$tmp" && mv "$tmp" "$codex"
-    echo "  added notify to ~/.codex/config.toml"
+  if grep -qsF 'notify = ["'"$HOME"'/.local/bin/tmux-agent-status", "done"]' "$codex"; then
+    sed -i.bak '/^notify = \[".*\/\.local\/bin\/tmux-agent-status", "done"\]$/d' "$codex" && rm -f "$codex.bak"
+    echo "  removed old notify line from ~/.codex/config.toml"
   fi
 }
 
