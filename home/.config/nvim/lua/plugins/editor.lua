@@ -1,5 +1,5 @@
 return {
-  { -- Pickers (files, grep, buffers…), lazygit, terminal. Ctrl-P like before.
+  { -- File tree, pickers (files, grep, buffers…), lazygit. Ctrl-P like before.
     "folke/snacks.nvim",
     lazy = false,
     priority = 900,
@@ -7,9 +7,12 @@ return {
       bigfile = { enabled = true },
       input = { enabled = true },
       lazygit = { enabled = true },
+      -- Sidebar file tree (like LazyVim's). Also opens for `nvim .`
+      explorer = { enabled = true, replace_netrw = true },
       picker = { enabled = true, icons = { files = { enabled = false } } },
     },
     keys = {
+      { "<leader>e", function() Snacks.explorer() end, desc = "File tree" },
       { "<C-p>", function() Snacks.picker.files() end, desc = "Find files" },
       { "<leader>ff", function() Snacks.picker.files() end, desc = "Files" },
       { "<leader>fg", function() Snacks.picker.grep() end, desc = "Grep" },
@@ -27,10 +30,11 @@ return {
     },
   },
 
-  { -- Edit directories like a buffer. `-` opens the current file's folder.
+  { -- Edit a directory like a buffer (rename/move/delete by editing text).
+    -- `-` opens the current file's folder. The file tree handles `nvim .`.
     "stevearc/oil.nvim",
     lazy = false,
-    opts = { columns = {}, view_options = { show_hidden = true } },
+    opts = { default_file_explorer = false, columns = {}, view_options = { show_hidden = true } },
     keys = { { "-", "<cmd>Oil<cr>", desc = "Open parent directory" } },
   },
 

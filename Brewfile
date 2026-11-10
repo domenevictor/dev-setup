@@ -41,3 +41,9 @@ brew "stylua"
 # System
 brew "btop"
 brew "wget"
+
+# Coding agents (macOS casks; on Linux see README)
+if OS.mac?
+  cask "claude-code"
+  cask "codex"
+end

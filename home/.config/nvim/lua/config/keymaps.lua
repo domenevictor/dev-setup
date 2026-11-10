@@ -21,7 +21,7 @@ end, { desc = "Strip trailing whitespace" })
 map("n", "<Esc>", "<cmd>nohlsearch<cr>")
 map("x", "<", "<gv")
 map("x", ">", ">gv")
-map("n", "<leader>e", vim.diagnostic.open_float, { desc = "Line diagnostics" })
+-- Line diagnostics popup: <C-w>d (built in). ,e is the file tree.
 map("n", "<leader>q", vim.diagnostic.setloclist, { desc = "Diagnostics to loclist" })
 map("n", "gd", vim.lsp.buf.definition, { desc = "Go to definition" })
 -- Also built in (Neovim 0.11+): K hover, grn rename, gra code action,

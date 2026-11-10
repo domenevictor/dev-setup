@@ -87,8 +87,10 @@ The status bar marks windows running an agent: `●` working, `!` waiting for yo
 | `,/`, `,fg` | grep |
 | `,fb` `,fr` `,fs` | buffers, recent files, symbols |
 | `,C` / `,fd` | diagnostics in this file / everywhere |
-| `-` | file browser for this folder (edit it like text) |
+| `,e` | file tree on the left (also opens for `nvim .`) |
+| `-` | this folder as an editable buffer (rename/move/delete by editing text) |
 | `gd`, `grr`, `gri`, `K` | definition, references, implementation, hover |
+| `C-w d` | diagnostics for this line |
 | `grn`, `gra` | rename, code action |
 | `,k` | format (also on save; `:FormatToggle` to turn off) |
 | `,w` | strip trailing whitespace |
@@ -111,4 +113,7 @@ Completion: `C-n`/`C-p` move, `C-y` accepts, `C-e` closes.
 - Homebrew runs on Linux too, so the same `Brewfile` works. C/C++ compilers and
   `clangd` come from apt.
 - The first run asks for your password for apt and to change the shell.
+- Claude Code and Codex are installed from Homebrew casks on macOS only. On
+  Linux, install them by hand for now: `curl -fsSL https://claude.ai/install.sh | bash`
+  and `npm install -g @openai/codex`.
 - Not yet tested on a real Linux machine; the Raspberry Pi 5 is the first target.
