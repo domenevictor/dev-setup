@@ -1,0 +1,13 @@
+# Global language runtimes. A project can pin its own versions with a
+# mise.toml, .nvmrc, .python-version or rust-toolchain.toml.
+[tools]
+node = "lts"      # JavaScript/TypeScript runtime; npm comes with it
+pnpm = "latest"   # faster npm, used by many JS projects
+bun = "latest"    # fast all-in-one JS runtime/toolkit; handy for scripts
+python = "3.14"
+uv = "latest"     # Python packages, venvs and tools (`uv run`, `uvx`)
+rust = "stable"   # via rustup: cargo, rustc, rustfmt, clippy
+
+[settings]
+# Respect .nvmrc / .node-version / .python-version files in projects.
+idiomatic_version_file_enable_tools = ["node", "python"]

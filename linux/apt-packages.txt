@@ -1,0 +1,14 @@
+# Installed with apt before Homebrew on Ubuntu/Debian.
+# Homebrew prerequisites
+build-essential
+procps
+curl
+file
+git
+# C/C++ tooling (on macOS these come with the Command Line Tools)
+clang
+clangd
+clang-format
+gdb
+# mosh needs a UTF-8 locale
+locales

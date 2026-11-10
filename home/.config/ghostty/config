@@ -1,0 +1,11 @@
+theme = Monokai Pro Spectrum
+font-family = Monaco
+font-size = 10
+
+# Option acts as Alt (needed for Alt-key shortcuts in nvim/tmux/fish).
+macos-option-as-alt = true
+# When you ssh somewhere, install Ghostty's terminfo there automatically,
+# so tmux/nvim on the remote machine don't complain about the terminal.
+shell-integration-features = ssh-terminfo,ssh-env
+copy-on-select = clipboard
+window-save-state = always
