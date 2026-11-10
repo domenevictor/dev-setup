@@ -25,6 +25,15 @@ set -g fish_greeting
 
 type -q mise; and mise activate fish | source
 type -q starship; and starship init fish | source
+
+# The prompt shows how long the last command took (if over 2s). Skip that for
+# interactive programs: time spent in nvim or tmux isn't worth reporting.
+function __hide_interactive_duration --on-event fish_postexec
+    set -l cmd (string split -f1 ' ' -- (string trim -- $argv[1]))
+    if contains -- $cmd nvim vim vi lazygit tmux ssh mosh claude codex less man btop htop top
+        set -g CMD_DURATION 0
+    end
+end
 type -q zoxide; and zoxide init fish | source
 if type -q fzf
     fzf --fish | source
