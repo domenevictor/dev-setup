@@ -12,7 +12,12 @@ git clone git@github.com:domenevictor/dev-setup.git ~/code/dev-setup
 ```
 
 Options: `--link-only` (just relink configs), `--no-runtimes` (skip mise),
-`--no-chsh` (keep the current login shell). Re-running is safe.
+`--no-chsh` (keep the current login shell), `--no-desktop` (skip desktop apps).
+Re-running is safe.
+
+Desktop apps (`Brewfile.desktop`: Ghostty) are installed only on a physical
+Mac. VMs and Linux machines skip them automatically. An app you already
+installed by hand is left alone.
 
 What it does:
 
@@ -45,6 +50,7 @@ In Neovim, `:Lazy update` updates plugins; commit the changed `lazy-lock.json`.
 | Path | What |
 | --- | --- |
 | `Brewfile` | CLI tools (both OSes) |
+| `Brewfile.desktop` | desktop apps for a physical Mac (Ghostty) |
 | `linux/apt-packages.txt` | Linux-only system packages (compilers, clangd) |
 | `home/.config/fish/config.fish` | shell: PATH, abbreviations, tool init |
 | `home/.config/starship.toml` | prompt (`➜ [host] dir git:(branch) ✗`) |

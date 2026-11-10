@@ -5,17 +5,19 @@
 #   ./install.sh --link-only   only (re)link config files into $HOME
 #   ./install.sh --no-runtimes skip mise runtimes (node, python, rust, ...)
 #   ./install.sh --no-chsh     don't change the login shell to fish
+#   ./install.sh --no-desktop  skip desktop apps (Ghostty); automatic in VMs/Linux
 set -euo pipefail
 
 REPO="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 OS="$(uname -s)"
-LINK_ONLY=0 RUNTIMES=1 CHSH=1
+LINK_ONLY=0 RUNTIMES=1 CHSH=1 DESKTOP=1
 for arg in "$@"; do
   case "$arg" in
     --link-only) LINK_ONLY=1 ;;
     --no-runtimes) RUNTIMES=0 ;;
     --no-chsh) CHSH=0 ;;
-    -h|--help) sed -n '2,8p' "$0"; exit 0 ;;
+    --no-desktop) DESKTOP=0 ;;
+    -h|--help) sed -n '2,9p' "$0"; exit 0 ;;
     *) echo "unknown option: $arg" >&2; exit 2 ;;
   esac
 done
@@ -63,6 +65,17 @@ install_brew() {
     load_brew
   fi
   brew bundle --file="$REPO/Brewfile"
+}
+
+install_desktop() {
+  # Only on a physical Mac: skip Linux and virtual machines.
+  [ "$OS" = Darwin ] || return 0
+  [ "$(sysctl -n kern.hv_vmm_present 2>/dev/null)" = 1 ] && return 0
+  step "Desktop apps (Ghostty)"
+  brew bundle --file="$REPO/Brewfile.desktop"
+  if [ -d /Applications/Ghostty.app ] && ! brew list --cask ghostty >/dev/null 2>&1; then
+    echo "  Ghostty was installed by hand; update it from its menu: Ghostty > Check for Updates"
+  fi
 }
 
 # ------------------------------------------------------------------ links ---
@@ -176,6 +189,7 @@ fi
 
 install_prereqs
 install_brew
+[ "$DESKTOP" = 1 ] && install_desktop
 link_home
 agent_hooks
 [ "$RUNTIMES" = 1 ] && install_runtimes

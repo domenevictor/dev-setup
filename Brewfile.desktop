@@ -1,0 +1,3 @@
+# Desktop apps: only installed on a Mac you sit at (skipped in VMs and on
+# Linux, or with --no-desktop). An app already installed by hand is left alone.
+cask "ghostty" unless File.exist?("/Applications/Ghostty.app")
