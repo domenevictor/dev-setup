@@ -17,6 +17,19 @@ map("n", "<leader>w", function()
   vim.fn.winrestview(view)
 end, { desc = "Strip trailing whitespace" })
 
+-- Splits: same letters as tmux (prefix | and -, prefix z). C-h/j/k/l move.
+map("n", "<leader>|", "<cmd>vsplit<cr>", { desc = "Split right" })
+map("n", "<leader>-", "<cmd>split<cr>", { desc = "Split below" })
+map("n", "<leader>x", "<cmd>close<cr>", { desc = "Close split" })
+map("n", "<leader>o", "<cmd>only<cr>", { desc = "Close other splits" })
+map("n", "<leader>z", function() Snacks.zen.zoom() end, { desc = "Zoom split (toggle)" })
+map("n", "<leader>=", "<C-w>=", { desc = "Equalize split sizes" })
+map("n", "<leader>H", "<C-w>H", { desc = "Move split to far left" })
+map("n", "<leader>J", "<C-w>J", { desc = "Move split to bottom" })
+map("n", "<leader>K", "<C-w>K", { desc = "Move split to top" })
+map("n", "<leader>L", "<C-w>L", { desc = "Move split to far right" })
+map("n", "<leader>r", "<C-w>r", { desc = "Rotate splits" })
+
 -- Quality of life
 map("n", "<Esc>", "<cmd>nohlsearch<cr>")
 map("x", "<", "<gv")

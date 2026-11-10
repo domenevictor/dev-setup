@@ -6,7 +6,7 @@ local o = vim.opt
 -- UI
 o.number = true
 o.cursorline = true
-o.colorcolumn = "81"
+o.colorcolumn = "81,121" -- markers after 80 and 120 characters
 o.signcolumn = "yes"
 o.showmode = false -- the statusline shows it
 o.laststatus = 3 -- one statusline for all splits
