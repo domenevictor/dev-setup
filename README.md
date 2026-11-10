@@ -51,9 +51,10 @@ Editing an existing file takes effect right away.
 
 ## Themes
 
-Default: **tokyonight-night** (Ghostty: TokyoNight Night). Also installed:
-**tokyonight-moon** (TokyoNight Moon), **gruvbox-material** (Gruvbox Material
-Dark) and **rose-pine-moon** (Rose Pine Moon).
+Default: **rose-pine-main** (Ghostty: Rose Pine). Also installed:
+**rose-pine-moon** (Rose Pine Moon), **tokyonight-night** (TokyoNight Night),
+**tokyonight-moon** (TokyoNight Moon) and **gruvbox-material** (Gruvbox
+Material Dark).
 
 - Neovim: `,fc` switches with live preview (for that session). To change the
   default, edit `home/.config/nvim/lua/plugins/ui.lua`.
