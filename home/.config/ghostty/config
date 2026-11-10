@@ -1,4 +1,9 @@
-theme = Monokai Pro Spectrum
+# Theme: matches the Neovim colorscheme. To switch, uncomment one line and
+# reload the config (Cmd+Shift+,). In nvim, ,fc switches the colorscheme.
+theme = Gruvbox Material Dark     # nvim: gruvbox-material (default)
+# theme = TokyoNight Moon         # nvim: tokyonight-moon
+# theme = Rose Pine Moon          # nvim: rose-pine-moon
+
 font-family = Monaco
 font-size = 10
 

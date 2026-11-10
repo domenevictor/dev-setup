@@ -1,13 +1,19 @@
 return {
-  { -- Same family as the Ghostty theme
-    "loctvl842/monokai-pro.nvim",
+  -- Themes. Default: gruvbox-material. Switch any time with ,fc (live preview).
+  -- Each has a matching Ghostty theme; see ~/.config/ghostty/config.
+  {
+    "sainnhe/gruvbox-material",
     lazy = false,
     priority = 1000,
     config = function()
-      require("monokai-pro").setup({ filter = "spectrum" })
-      vim.cmd.colorscheme("monokai-pro")
+      vim.g.gruvbox_material_background = "medium"
+      vim.g.gruvbox_material_better_performance = 1
+      vim.g.gruvbox_material_enable_italic = 1
+      vim.cmd.colorscheme("gruvbox-material")
     end,
   },
+  { "folke/tokyonight.nvim", lazy = false, priority = 1000, opts = { style = "moon" } }, -- tokyonight-moon
+  { "rose-pine/neovim", name = "rose-pine", lazy = false, priority = 1000, opts = { variant = "moon" } }, -- rose-pine-moon
 
   { -- Shows available keys after you press , (or g, z, ], ...) and wait
     "folke/which-key.nvim",

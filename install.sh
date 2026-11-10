@@ -107,6 +107,14 @@ link_home() {
     echo "  linked ~/$rel"
   done < <(cd "$REPO/home" && find . -type f ! -name .DS_Store | sed 's|^\./||' | sort)
 
+  # Remove links to files that were deleted from the repo.
+  local link
+  while IFS= read -r link; do
+    case "$(readlink "$link")" in
+      "$REPO/home/"*) [ -e "$link" ] || { rm "$link"; echo "  removed stale link ${link/#$HOME/~}"; } ;;
+    esac
+  done < <(find "$HOME/.config" "$HOME/.local/bin" -type l 2>/dev/null)
+
   # bash/zsh (used by Claude Code, Codex and scripts) get the same PATH as fish.
   local line='[ -f "$HOME/.config/dev-setup/env.sh" ] && . "$HOME/.config/dev-setup/env.sh"'
   for rc in .zshenv .bashrc .profile; do

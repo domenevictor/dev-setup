@@ -45,6 +45,21 @@ cd ~/code/dev-setup && git pull && ./install.sh
 
 In Neovim, `:Lazy update` updates plugins; commit the changed `lazy-lock.json`.
 
+Configs are linked file by file, so after **adding or deleting** a file under
+`home/`, run `./install.sh --link-only` (it also removes links to deleted files).
+Editing an existing file takes effect right away.
+
+## Themes
+
+Default: **gruvbox-material** (Ghostty: Gruvbox Material Dark). Also installed:
+**tokyonight-moon** (TokyoNight Moon) and **rose-pine-moon** (Rose Pine Moon).
+
+- Neovim: `,fc` switches with live preview (for that session). To change the
+  default, edit `home/.config/nvim/lua/plugins/ui.lua`.
+- Ghostty: uncomment the matching line in `home/.config/ghostty/config`, then
+  Cmd+Shift+, to reload.
+- tmux uses the terminal's own colors, so it follows Ghostty automatically.
+
 ## What's where
 
 | Path | What |

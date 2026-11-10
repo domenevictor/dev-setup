@@ -26,6 +26,7 @@ return {
       { "<leader>fd", function() Snacks.picker.diagnostics() end, desc = "Diagnostics (all)" },
       { "<leader>C", function() Snacks.picker.diagnostics_buffer() end, desc = "Diagnostics (buffer)" },
       { "<leader>f.", function() Snacks.picker.resume() end, desc = "Resume last picker" },
+      { "<leader>fc", function() Snacks.picker.colorschemes() end, desc = "Colorscheme (live preview)" },
       { "<leader>lg", function() Snacks.lazygit() end, desc = "Lazygit" },
     },
   },
